@@ -1,7 +1,6 @@
-import { Module, Global } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { LogService } from './log.service';
 
-@Global()
 @Module({
   providers: [LogService],
   // 这里是以数组的方式,表示一个模块里面可以对外暴露多个
