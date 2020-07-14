@@ -4,7 +4,7 @@ import { UserController } from './user.controller';
 
 @Module({
   imports: [
-    LogModule.register('user')
+    LogModule.forRoot('user')
   ],
   controllers: [UserController]
 })
