@@ -8,14 +8,12 @@ export class UserController {
     return '用户主页';
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Get('login')
   @Render('login')
   loginPage() {
     return { title: '登录页面' };
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Post('login')
   login(
     @Body() body: any,
