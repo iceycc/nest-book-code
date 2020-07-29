@@ -5,9 +5,9 @@ module.exports = {
   username: 'root',
   password: '123456',
   database: 'typeorm_mysql',
-  synchronize: true,
+  synchronize: false,
   logging: true,
-  dropSchema: true,
+  dropSchema: false,
   entities: [
     'src/entity/**/*.ts'
   ]
