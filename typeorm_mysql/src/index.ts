@@ -1,44 +1,35 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
+import { UserExtend } from './entity/UserExtend';
 
 createConnection().then(async connection => {
-    // 1.新增数据
-    // const user = new User()
-    // user.username = '张三';
-    // user.password = '123456';
-    // // save里面传递一个对象
-    // connection.manager.save(user).then(user => {
-    //     console.log('插入成功', user);
-    // });
-
-    // 2.使用async+await
-    // const user = new User();
-    // user.username = '李四';
-    // user.password = '123456';
-    // const result = await connection.manager.save(user);
-    // console.log('插入结果', result);
-
-    // 3.使用Repositories方式新增数据
+    // // 创建一个用户
     // const user = new User();
     // user.username = '王五';
     // user.password = '123456';
+
+    // const userExtend = new UserExtend();
+    // userExtend.mobile = '13412345678';
+    // userExtend.address = '中国';
+    // // 关联两个数据模型
+    // userExtend.user = user;
+
+    // // 必须先保存用户表,因为他要提供主键出来
     // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.save(user);
+    // await userRepository.save(user);
+
+    // const userExtendRepository = connection.getRepository(UserExtend);
+    // await userExtendRepository.save(userExtend);
+    // console.log('插入数据成功');
+
+    // 使用relations关联查询数据(正向查找)
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ relations: ['userDetail'] })
     // console.log(result);
 
-    // 4.删除数据
-    // 4.1创建一个句柄
-    // const userRepository = connection.getRepository(User);
-    // // 4.2根据句柄去查询实体findOne传递数字会默认根据id查询
-    // const user = await userRepository.findOne(1);
-    // // 4.3删除数据
-    // await userRepository.remove(user);
-
-    // 5.修改数据
-    const userRepository = connection.getRepository(User);
-    const user = await userRepository.findOne(2);
-    user.password = '23456';
-    await userRepository.save(user);
+    const userExtendRepository = connection.getRepository(UserExtend);
+    const result = await userExtendRepository.find({ relations: ['user'] });
+    console.log(result);
 
 }).catch(error => console.log(error));

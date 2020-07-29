@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
+import { UserExtend } from './UserExtend';
 
 @Entity({ name: 'user' })
 export class User {
@@ -50,6 +51,9 @@ export class User {
         comment: '更新时间',
     })
     updateAt: Date;
+
+    @OneToOne(type => UserExtend, userExtend => userExtend.user)
+    userDetail: UserExtend;
 }
 
 
