@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany } from "typeorm";
 import { UserExtend } from './UserExtend';
+import { Posts } from './Posts';
 
 @Entity({ name: 'user' })
 export class User {
@@ -54,6 +55,9 @@ export class User {
 
     @OneToOne(type => UserExtend, userExtend => userExtend.user)
     userDetail: UserExtend;
+
+    @OneToMany(type => Posts, post => post.user)
+    posts: Posts[]
 }
 
 
