@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany } from 'typeorm';
 import { User } from './User';
+import { Tags } from './Tags';
 
 @Entity({ name: 'posts' })
 export class Posts {
@@ -54,4 +55,7 @@ export class Posts {
 
   @ManyToOne(type => User, user => user.posts)
   user: User
+
+  @ManyToMany(type => Tags, tag => tag.posts)
+  tags: Tags[];
 }
