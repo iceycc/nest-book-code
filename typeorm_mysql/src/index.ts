@@ -64,11 +64,16 @@ createConnection().then(async connection => {
     // console.log(result);
 
     // 创建关系查询
+    // const result = await getConnection()
+    //     .createQueryBuilder(User, 'user')
+    //     // 第一个参数是定义字段,第二个实体类,第三个是别名,第四个是条件
+    //     .leftJoinAndMapMany('user.posts', Posts, 'posts', 'user.id=posts.userId')
+    //     .getMany();
+    // console.log(JSON.stringify(result));
     const result = await getConnection()
         .createQueryBuilder(User, 'user')
-        // 第一个参数是定义字段,第二个实体类,第三个是别名,第四个是条件
-        .leftJoinAndMapMany('user.posts', Posts, 'posts', 'user.id=posts.userId')
-        .getMany();
-    console.log(JSON.stringify(result));
+        .select('SUM(user.id)', 'sum')
+        .getRawOne();
+    console.log(result);
 
 }).catch(error => console.log(error));
