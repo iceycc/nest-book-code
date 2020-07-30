@@ -1,51 +1,77 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { createConnection, Not } from "typeorm";
 import { User } from "./entity/User";
 import { UserExtend } from './entity/UserExtend';
 import { Posts } from './entity/Posts';
 import { Tags } from './entity/Tags';
 
 createConnection().then(async connection => {
-    // 创建tag1
-    // const tag1 = new Tags();
-    // tag1.name = 'mysql';
-
-    // // 创建tag2
-    // const tag2 = new Tags();
-    // tag2.name = 'node';
-
-    // // 帖子一
-    // const posts1 = new Posts();
-    // posts1.title = '文章一';
-    // posts1.content = '文章一内容';
-    // posts1.tags = [tag1, tag2];
-
-    // // 帖子二
-    // const posts2 = new Posts();
-    // posts2.title = '文章二';
-    // posts2.content = '文章二内容';
-    // posts2.tags = [tag1];
-
-    // // 创建一个用户
-    // const user = new User();
-    // user.username = '王五';
-    // user.password = '123456';
-    // user.posts = [posts1, posts2];
-
-
+    // 1.查询全部的字段
     // const userRepository = connection.getRepository(User);
-    // const postsRepository = connection.getRepository(Posts);
-    // const tagRepository = connection.getRepository(Tags);
-    // await tagRepository.save(tag1);
-    // await tagRepository.save(tag2);
+    // const result = await userRepository.find();
+    // console.log(result);
 
-    // await postsRepository.save(posts1);
-    // await postsRepository.save(posts2);
-    // await userRepository.save(user);
-    // console.log('添加数据成功');
+    // 2.使用select选择性的查询字段
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ select: ['id', 'username'] });
+    // console.log(result);
 
-    const postsRepository = connection.getRepository(Posts);
-    const result = await postsRepository.findOne({ where: { id: 1 }, relations: ['tags', 'user'] });
+    // 3.使用where条件查询
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ where: { id: 1 } });
+    // console.log(result);
+
+    // 4.使用where..and查询
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ where: { id: 1, username: 'xx' } });
+    // console.log(result);
+
+    // 5.使用where..or查询数据
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ where: [{ id: 1 }, { username: 'xx' }] });
+    // console.log(result);
+
+    // 6.relations关系查询
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({ relations: ['userDetail'] });
+    // console.log(result);
+
+    // 7.使用join
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({
+    //     join: {
+    //         alias: 'user',
+    //         leftJoinAndSelect: {
+    //             detail: 'user.userDetail',
+    //             posts: 'user.posts'
+    //         }
+    //     }
+    // });
+    // console.log(JSON.stringify(result));
+
+    // 8.排序
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({
+    //     order: {
+    //         id: 'DESC',
+    //         username: 'ASC'
+    //     }
+    // });
+    // console.log(result);
+
+    // // 9.分页查询
+    // const userRepository = connection.getRepository(User);
+    // const result = await userRepository.find({
+    //     skip: 0,
+    //     take: 10,
+    // })
+    // console.log(result);
+
+    // 10.Not
+    const userRepository = connection.getRepository(User);
+    const result = await userRepository.find({
+        username: Not('王五')
+    });
     console.log(result);
 
 }).catch(error => console.log(error));
