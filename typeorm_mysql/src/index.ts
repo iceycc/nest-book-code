@@ -1,77 +1,74 @@
 import "reflect-metadata";
-import { createConnection, Not } from "typeorm";
+import { createConnection, Not, getConnection, getManager, getRepository } from "typeorm";
 import { User } from "./entity/User";
 import { UserExtend } from './entity/UserExtend';
 import { Posts } from './entity/Posts';
 import { Tags } from './entity/Tags';
 
 createConnection().then(async connection => {
-    // 1.查询全部的字段
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find();
+    // 1.使用connection创建
+    // const user = await getConnection()
+    //     .createQueryBuilder()
+    //     .select(['user.id', 'user.username']) // 需要选择查询的字段,如果想要全部查询可以不加select
+    //     .from(User, 'user') // 从哪张表,并且定义别名为user
+    //     .where('(user.id=:id)', { id: 1 }) // 过滤条件
+    //     .getOne(); // 查询一个
+    // console.log(user);
+
+    // 2.使用connection创建
+    // const user = await getConnection()
+    //     .createQueryBuilder(User, 'user')
+    //     .select(['user.id', 'user.username'])
+    //     .where('(user.id=:id)', { id: 1 })
+    //     .getOne();
+    // console.log(user);
+
+    // // 3.使用entity manager创建
+    // const user = await getManager()
+    //     .createQueryBuilder(User, 'user')
+    //     .select('user')
+    //     .getMany();
+    // console.log(user);
+
+    // // 4.使用repository创建
+    // const user = await getRepository(User)
+    //     .createQueryBuilder('user')
+    //     .getMany();
+    // console.log(user);
+
+    // 插入数据
+    // const result = await getConnection()
+    //     .createQueryBuilder()
+    //     .insert() // 插入数据的时候要指明插入到那个实体类
+    //     .into(User)
+    //     .values([{ username: '张三', password: '1234' }, { username: '李四', password: '12345' }])
+    //     .execute();
     // console.log(result);
 
-    // 2.使用select选择性的查询字段
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({ select: ['id', 'username'] });
+    // 更新数据
+    // const result = await getConnection()
+    //     .createQueryBuilder()
+    //     .update(User)
+    //     .set({ username: '哈哈哈' })
+    //     .where('id=:id', { id: 1 })
+    //     .execute();
     // console.log(result);
 
-    // 3.使用where条件查询
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({ where: { id: 1 } });
+    // // 删除数据
+    // const result = await getConnection()
+    //     .createQueryBuilder()
+    //     .delete()
+    //     .from(User)
+    //     .where('id=:id', { id: 3 })
+    //     .execute();
     // console.log(result);
 
-    // 4.使用where..and查询
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({ where: { id: 1, username: 'xx' } });
-    // console.log(result);
-
-    // 5.使用where..or查询数据
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({ where: [{ id: 1 }, { username: 'xx' }] });
-    // console.log(result);
-
-    // 6.relations关系查询
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({ relations: ['userDetail'] });
-    // console.log(result);
-
-    // 7.使用join
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({
-    //     join: {
-    //         alias: 'user',
-    //         leftJoinAndSelect: {
-    //             detail: 'user.userDetail',
-    //             posts: 'user.posts'
-    //         }
-    //     }
-    // });
-    // console.log(JSON.stringify(result));
-
-    // 8.排序
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({
-    //     order: {
-    //         id: 'DESC',
-    //         username: 'ASC'
-    //     }
-    // });
-    // console.log(result);
-
-    // // 9.分页查询
-    // const userRepository = connection.getRepository(User);
-    // const result = await userRepository.find({
-    //     skip: 0,
-    //     take: 10,
-    // })
-    // console.log(result);
-
-    // 10.Not
-    const userRepository = connection.getRepository(User);
-    const result = await userRepository.find({
-        username: Not('王五')
-    });
-    console.log(result);
+    // 创建关系查询
+    const result = await getConnection()
+        .createQueryBuilder(User, 'user')
+        // 第一个参数是定义字段,第二个实体类,第三个是别名,第四个是条件
+        .leftJoinAndMapMany('user.posts', Posts, 'posts', 'user.id=posts.userId')
+        .getMany();
+    console.log(JSON.stringify(result));
 
 }).catch(error => console.log(error));
