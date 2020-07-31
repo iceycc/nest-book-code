@@ -27,13 +27,13 @@ export class UserEntity {
   })
   password: string;
 
-  // @Column('tinyint', {
-  //   nullable: false,
-  //   default: () => 0,
-  //   name: 'is_del',
-  //   comment: '是否删除,1表示删除,0表示正常'
-  // })
-  // isDel: number;
+  @Column('tinyint', {
+    nullable: false,
+    default: () => 0,
+    name: 'is_del',
+    comment: '是否删除,1表示删除,0表示正常'
+  })
+  isDel: number;
 
   @CreateDateColumn({
     type: 'timestamp',
