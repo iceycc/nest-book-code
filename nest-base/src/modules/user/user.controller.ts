@@ -17,6 +17,7 @@ export class UserController {
 
   @Get()
   async userList(): Promise<UserEntity[]> {
+    console.log('获取用户数据');
     return await this.userService.userList();
   }
 }
