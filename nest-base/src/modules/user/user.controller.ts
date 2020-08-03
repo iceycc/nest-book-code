@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get } from '@nestjs/common';
+import { Controller, Body, Post, Get, HttpException, HttpCode, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 import { CreateUserTdo } from './dto/create.user.dto';
@@ -19,6 +19,7 @@ export class UserController {
   @Get()
   async userList(): Promise<UserEntity[]> {
     console.log('获取用户数据');
+    throw new HttpException({ message: '获取数据错误', code: 2000 }, HttpStatus.OK);
     return await this.userService.userList();
   }
 }
