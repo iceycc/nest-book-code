@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany } from "typeorm";
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -19,6 +20,7 @@ export class UserEntity {
   })
   username: string;
 
+  @Exclude() // 排除返回字段,不返回给前端
   @Column({
     type: 'varchar',
     nullable: false,
@@ -50,6 +52,11 @@ export class UserEntity {
     comment: '更新时间',
   })
   updateAt: Date;
+
+  @Expose()
+  isDelStr(): string {
+    return this.isDel ? '删除' : '正常'
+  }
 }
 
 
