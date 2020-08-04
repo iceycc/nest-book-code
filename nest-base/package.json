@@ -33,6 +33,7 @@
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "nestjs-config": "^1.4.7",
+    "node-auth0": "0.0.7",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",

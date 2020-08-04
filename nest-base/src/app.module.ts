@@ -21,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
         password: config.get('database.password'),
         database: config.get('database.database'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        subscribers: [__dirname + './../subscribers/*.subscriber{.ts,.js}'],
         logging: config.get('database.logging'),
         timezone: '+08:00', // 东八区
       }),

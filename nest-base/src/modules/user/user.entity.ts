@@ -1,8 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, BeforeInsert } from "typeorm";
 import { Exclude, Expose } from 'class-transformer';
+import NodeAuth from 'node-auth0';
 
 @Entity({ name: 'user' })
 export class UserEntity {
+  @Exclude()
+  private nodeAuth: NodeAuth;
+
+  constructor () {
+    this.nodeAuth = new NodeAuth();
+  }
+
   @PrimaryGeneratedColumn({
     type: 'int',
     name: 'id',
@@ -56,6 +64,12 @@ export class UserEntity {
   @Expose()
   isDelStr(): string {
     return this.isDel ? '删除' : '正常'
+  }
+
+  @BeforeInsert()
+  makePassword(): void {
+    console.log(this.nodeAuth.makePassword(this.password), '???密码加密了')
+    this.password = this.nodeAuth.makePassword(this.password);
   }
 }
 
