@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from 'nestjs-config';
 
 import { UserModule } from './modules/user/user.module';
 import { ToolsService } from './services/tools/tools.service';
+import { RedisUtilsModule } from './modules/redis-utils/redis-utils.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ToolsService } from './services/tools/tools.service';
       inject: [ConfigService],
     }),
     UserModule,
+    RedisUtilsModule,
   ],
   controllers: [],
   providers: [
