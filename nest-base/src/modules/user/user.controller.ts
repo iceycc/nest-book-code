@@ -1,7 +1,8 @@
-import { Controller, Body, Post, Get, HttpException, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Body, Post, Get, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
-import { CreateUserTdo } from './dto/create.user.dto';
+import { CreateUserDto } from './dto/create.user.dto';
+import { AuthGuard } from 'src/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -11,15 +12,15 @@ export class UserController {
 
   @Post()
   async createUser(
-    @Body() data: CreateUserTdo
+    @Body() data: CreateUserDto
   ): Promise<UserEntity> {
     return await this.userService.createUser(data);
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   async userList(): Promise<UserEntity[]> {
     console.log('获取用户数据');
-    throw new HttpException({ message: '获取数据错误', code: 2000 }, HttpStatus.OK);
     return await this.userService.userList();
   }
 }
