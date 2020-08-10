@@ -6,7 +6,7 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 
 @ApiTags('用户模块')
-@ApiBearerAuth() // 文档上会有一把锁的状态
+@ApiBearerAuth() // Swagger 的 JWT 验证 
 @UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
