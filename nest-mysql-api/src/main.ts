@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
@@ -29,10 +30,22 @@ async function bootstrap() {
   // 给请求添加prefix
   app.setGlobalPrefix(PREFIX);
   // 配置全局拦截器、过滤器、管道
-  app.useGlobalInterceptors(new LoggingInterceptor())
-  app.useGlobalInterceptors(new TransformInterceptor())
-  app.useGlobalFilters(new HttpExceptionFilter())
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
+
+  // 配置api文档信息
+  const options = new DocumentBuilder()
+    .setTitle('nest framework  api文档')
+    .setDescription('nest framework  api接口文档')
+    .setBasePath(PREFIX) // 设置基础的路径
+    .addBearerAuth({ type: 'apiKey', in: 'header', name: 'token' }) // 设置请求头的token字段
+    .setVersion('0.0.1')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup(`${PREFIX}/docs`, app, document);
 
   await app.listen(PORT);
   Logger.log(`服务已经启动:localhost:${PORT}/${PREFIX}`);
