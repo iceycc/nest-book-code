@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, HttpCode, Post, Body } from '@nestjs/common';
+import { Controller, HttpStatus, HttpCode, Post, Body, Delete, Param, ParseIntPipe } from '@nestjs/common';
 
 import { UsersService } from '../../services/users/users.service';
 import adminConfig from '@src/config/admin.config';
@@ -24,5 +24,13 @@ export class UsersController {
     @Body() createUserDto: CreateUserDto,
   ): Promise<AdminUserEntity> {
     return await this.userService.createUser(createUserDto);
+  }
+
+  @ApiOperation({ summary: '删除数据', description: '根据用户id删除数据' })
+  @Delete(':id')
+  async deleteById(
+    @Param('id', new ParseIntPipe()) id: number
+  ): Promise<string> {
+    return await this.userService.deleteById(id);
   }
 }

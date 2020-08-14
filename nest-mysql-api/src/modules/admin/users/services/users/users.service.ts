@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getConnection } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateUserDto } from '../../controllers/users/dto/create.user.dto';
 import { AdminUserEntity } from '../../entities/users.entity';
@@ -26,6 +26,23 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto): Promise<AdminUserEntity> {
     const user = await this.userRepository.create(createUserDto);
     return await this.userRepository.save(user);
+  }
+
+  /**
+   * @Author: 水痕
+   * @Date: 2020-08-14 16:50:31
+   * @LastEditors: 水痕
+   * @Description: 根据id删除数据
+   * @param {type} 
+   * @return {type} 
+   */
+  async deleteById(id: number): Promise<string> {
+    const { raw: { affectedRows } } = await this.userRepository.update(id, { isDel: 1 });
+    if (affectedRows) {
+      return '删除成功';
+    } else {
+      return '删除失败';
+    }
   }
 
   /**
