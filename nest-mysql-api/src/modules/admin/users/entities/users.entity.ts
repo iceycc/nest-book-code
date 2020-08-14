@@ -1,8 +1,18 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import NodeAuth from 'node-auth0';
+import { ObjectType } from '@src/types';
 
 @Entity('admin_user')// 可能有前端的用户表,看情况区分
 export class AdminUserEntity extends BaseEntity {
+  // 在实体类中定义的字段都会默认返回给前端,加上这个就表示不返回给客户端
+  @Exclude()
+  private nodeAuth: NodeAuth;
+
+  constructor () {
+    super()
+    this.nodeAuth = new NodeAuth();
+  }
   @PrimaryGeneratedColumn({
     type: 'int',
     name: 'id',
@@ -19,6 +29,7 @@ export class AdminUserEntity extends BaseEntity {
   })
   username: string;
 
+  @Exclude()
   @Column({
     type: 'varchar',
     length: 100,
@@ -53,4 +64,23 @@ export class AdminUserEntity extends BaseEntity {
     comment: '更新时间',
   })
   updatedAt: Date;
+
+  // 使用typeorm的钩子函数在插入数据的时候就进行加密处理
+  @BeforeInsert()
+  makePassword() {
+    this.password = this.nodeAuth.makePassword(this.password);
+  }
+
+  /**
+   * @Author: 水痕
+   * @Date: 2020-08-14 12:18:27
+   * @LastEditors: 水痕
+   * @Description: 定义返回数据,将密码及nodeAuth过滤出来
+   * @param {type} 
+   * @return {type} 
+   */
+  public get toResponseObject(): ObjectType {
+    const { nodeAuth, password, isDel, ...params } = this;
+    return params;
+  }
 }

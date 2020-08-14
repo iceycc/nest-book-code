@@ -3,8 +3,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { RedisUtilsModule } from './modules/redis-utils/redis-utils.module';
 import { AdminModule } from './modules/admin/admin.module';
 
@@ -33,7 +31,7 @@ import { AdminModule } from './modules/admin/admin.module';
     RedisUtilsModule,
     AdminModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule { }

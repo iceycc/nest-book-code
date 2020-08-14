@@ -38,6 +38,7 @@
     "mysql": "^2.18.1",
     "nestjs-config": "^1.4.7",
     "nestjs-redis": "^1.2.8",
+    "node-auth0": "0.0.7",
     "node-sso": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
