@@ -9,7 +9,6 @@ module.exports = [
     password: process.env.DB_PASSWORD,
     logging: false,
     entities: [
-      'src/entity/**/*.entity.{ts,js}',
       'src/modules/**/*.entity.{ts,js}'
     ],
     migrations: [

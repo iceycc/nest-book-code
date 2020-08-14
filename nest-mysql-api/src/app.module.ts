@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from 'nestjs-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RedisUtilsModule } from './modules/redis-utils/redis-utils.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { RedisUtilsModule } from './modules/redis-utils/redis-utils.module';
       inject: [ConfigService],
     }),
     RedisUtilsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
