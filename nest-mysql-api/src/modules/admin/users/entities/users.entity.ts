@@ -1,9 +1,10 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, BeforeInsert, Unique } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import NodeAuth from 'node-auth0';
 import { ObjectType } from '@src/types';
 
 @Entity('admin_user')// 可能有前端的用户表,看情况区分
+@Unique('username_is_del', ['username', 'isDel'])
 export class AdminUserEntity extends BaseEntity {
   // 在实体类中定义的字段都会默认返回给前端,加上这个就表示不返回给客户端
   @Exclude()
