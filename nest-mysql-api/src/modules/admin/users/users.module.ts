@@ -6,12 +6,14 @@ import { LoginController } from './controllers/login/login.controller';
 import { UsersService } from './services/users/users.service';
 import { AdminUserEntity } from './entities/users.entity';
 import { ToolsService } from '@src/services/tools/tools.service';
+import { RedisUtilsModule } from '@src/modules/redis-utils/redis-utils.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       AdminUserEntity,
-    ])
+    ]),
+    RedisUtilsModule,
   ],
   controllers: [
     UsersController,

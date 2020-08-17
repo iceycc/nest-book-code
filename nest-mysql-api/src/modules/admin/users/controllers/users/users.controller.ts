@@ -1,14 +1,17 @@
-import { Controller, HttpStatus, HttpCode, Post, Body, Delete, Param, ParseIntPipe, Patch, Get, Query } from '@nestjs/common';
+import { Controller, HttpStatus, HttpCode, Post, Body, Delete, Param, ParseIntPipe, Patch, Get, Query, UseGuards } from '@nestjs/common';
 
 import { UsersService } from '../../services/users/users.service';
 import adminConfig from '@src/config/admin.config';
 import { CreateUserDto } from './dto/create.user.dto';
 import { AdminUserEntity } from '../../entities/users.entity';
-import { ApiOperation, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiCreatedResponse, ApiTags, ApiBasicAuth } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { ObjectType } from '@src/types';
+import { AuthGuard } from '@src/guard/auth.guard';
 
 @ApiTags('用户模块')
+@ApiBasicAuth()
+@UseGuards(AuthGuard)
 @Controller(`${adminConfig.adminPath}/users`)
 export class UsersController {
   constructor (

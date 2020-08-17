@@ -9,6 +9,7 @@ import {
 import * as url from 'url';
 import { RedisUtilsService } from 'src/modules/redis-utils/redis-utils.service';
 import { jwt } from 'src/utils';
+import { ObjectType } from '@src/types';
 
 
 @Injectable()
@@ -25,18 +26,28 @@ export class AuthGuard implements CanActivate {
       this.getUrlQuery(request.url, 'token');
     Logger.log(`当前的token: ${token}`, 'AuthGuard');
     if (token) {
-      // 拿到token反解出里面的用户id,然后用用户id去redis里面查询redis里面的的token是否与当前的一致
-      const currentUserId = jwt.decodeToken(token);
-      const redisData = await this.redisUtilsService.get(currentUserId);
-      console.log(JSON.stringify(redisData), 'redis数据')
-      if (Object.is(token, redisData.token)) {
-        request.user = redisData.user;
-        return true;
-      } else {
-        throw new HttpException('token已经失效,请重新登录', HttpStatus.UNAUTHORIZED);
+      try {
+        // 拿到token反解出里面的用户id,然后用用户id去redis里面查询redis里面的的token是否与当前的一致
+        const currentUserId = jwt.decodeToken(token);
+        if (!currentUserId) {
+          throw new HttpException(JSON.stringify({ code: 10042, message: '无效的token' }), HttpStatus.OK);
+        }
+        console.log(currentUserId, '用户id')
+        const redisData = await this.redisUtilsService.get(currentUserId);
+        console.log(JSON.stringify(redisData), 'redis数据')
+        if (Object.is(token, redisData.token)) {
+          // 将当前的信息附加到request变量上,然后可以自己定义装饰器获取当前用户信息
+          request.user = redisData.userInfo;
+          return true;
+        } else {
+          throw new HttpException(JSON.stringify({ code: 10042, message: 'token已经失效,请重新登录' }), HttpStatus.OK);
+        }
+      } catch (e) {
+        Logger.error(e, 'auth');
+        throw new HttpException(e, e.status);
       }
     } else {
-      throw new HttpException('你还没登录,请先登录', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(JSON.stringify({ code: 10042, message: '你还没登录,请先登录' }), HttpStatus.OK);
     }
   }
 
@@ -49,7 +60,7 @@ export class AuthGuard implements CanActivate {
    * @param key {String} 获取单独的一个key
    * @return: 
   */
-  private getUrlQuery(urlPath: string, key?: string): string | { [propsName: string]: any } {
+  private getUrlQuery(urlPath: string, key?: string): string | ObjectType {
     const query = url.parse(urlPath, true).query
     if (key) {
       return query[key]

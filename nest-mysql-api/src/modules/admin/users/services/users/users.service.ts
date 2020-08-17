@@ -8,6 +8,8 @@ import { LoginDto } from '../../controllers/login/dto/login.dto';
 import { ToolsService } from '@src/services/tools/tools.service';
 import { UpdateUserDto } from '../../controllers/users/dto/update.user.dto';
 import { ObjectType } from '@src/types';
+import { jwt } from '@src/utils';
+import { RedisUtilsService } from '@src/modules/redis-utils/redis-utils.service';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +17,7 @@ export class UsersService {
     @InjectRepository(AdminUserEntity)
     private readonly userRepository: Repository<AdminUserEntity>,
     private readonly toolsService: ToolsService,
+    private readonly redisUtilsService: RedisUtilsService,
   ) { }
 
   /**
@@ -126,9 +129,19 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { username } });
     if (user) {
       if (this.toolsService.checkPassword(password, user.password)) {
+        // 1.生成token,这里区分下是后台管理员的id
+        const adminUserId = `admin_${user.id}`;
+        const token = jwt.createToken(adminUserId);
+        // 2.将用户信息、token存到到redis中
+        const userInfo = user.toResponseObject;
+        const redisData = {
+          token,
+          userInfo,
+        }
+        this.redisUtilsService.set(adminUserId, redisData);
         return {
-          ...user.toResponseObject,
-          token: 'aaa'
+          ...userInfo,
+          token: token
         };
       } else {
         throw new HttpException('用户名或者密码不正确', HttpStatus.OK);

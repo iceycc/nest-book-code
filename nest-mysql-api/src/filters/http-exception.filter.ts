@@ -13,12 +13,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = exception.message;
+    let message = exception.message;
+    let code = 1;
+    try {
+      const messageObj = JSON.parse(message);
+      code = messageObj.code;
+      message = messageObj.message
+    } catch (e) { }
     Logger.log(exception, '错误提示');
     const errorResponse = {
       status,
       message,
-      code: 1, // 自定义code
+      code: code, // 自定义code
       path: request.url, // 错误的url地址
       method: request.method, // 请求方式
       timestamp: new Date().toISOString(), // 错误的时间
