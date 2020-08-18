@@ -37,24 +37,18 @@ export class LoginComponent implements OnInit {
       this.loginValidateForm.controls[i].updateValueAndValidity();
     }
     if (this.loginValidateForm.valid) {
-      console.log('登录成功');
-      storage.setItem(X_USER_TOKEN, JSON.stringify('1234567'));
-      storage.setItem(userInfo, JSON.stringify({ username: '张三' }));
-      // 跳转到首页
-      this.router.navigate(['/home']);
-      // this.loginService.loginApi$(value).subscribe(data => {
-      //   const { code, message, result } = data;
-      //   if (Object.is(code, 0)) {
-      //     console.log(value);
-      //     this.message.create('success', message);
-      //     storage.setItem(authToken, JSON.stringify(result.token));
-      //     storage.setItem(userInfo, JSON.stringify(result));
-      //     // 跳转到首页
-      //     this.router.navigate(['/home']);
-      //   } else {
-      //     this.message.create('error', message);
-      //   }
-      // })
+      this.loginService.loginApi$(value).subscribe(data => {
+        const { code, message, result } = data;
+        if (Object.is(code, 0)) {
+          this.message.create('success', message);
+          storage.setItem(X_USER_TOKEN, result.token);
+          storage.setItem(userInfo, JSON.stringify(result));
+          // 跳转到首页
+          this.router.navigate(['/home']);
+        } else {
+          this.message.create('error', message);
+        }
+      })
     } else {
       console.log('表单数据校验不通过');
     }

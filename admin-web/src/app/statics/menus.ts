@@ -19,6 +19,14 @@ export default {
       icon: 'team',
     },
     {
+      id: 3,
+      name: '用户中心',
+      parentId: 2,
+      sort: 3,
+      url: 'system/user',
+      icon: 'user',
+    },
+    {
       id: 4,
       name: '角色管理',
       parentId: 2,
@@ -33,14 +41,6 @@ export default {
       sort: 5,
       url: 'system/access',
       icon: 'apartment',
-    },
-    {
-      id: 3,
-      name: '用户中心',
-      parentId: 2,
-      sort: 3,
-      url: 'system/user',
-      icon: 'user',
     },
     {
       id: 6,
