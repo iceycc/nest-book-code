@@ -2,17 +2,19 @@ import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+
+import { NZ_I18N, en_US } from 'ng-zorro-antd';
+// 配置 angular i18n
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/zh';
+
+import { AuthGuard } from '../../auth/auth.guard';
+import { ServicesModule } from '@app/services/services.module';
 import { ViewsModule } from '../../views/views.module';
 import { SharedModule } from '../shared/shared.module';
 import { AppRoutingModule } from '../../app-routing.module';
-import { NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import { registerLocaleData } from '@angular/common';
-import { AuthGuard } from '../../auth/auth.guard';
-import { ServiceModule } from '../service/service.module';
 
-// 配置 angular i18n
-import zh from '@angular/common/locales/zh';
-registerLocaleData(zh);
+registerLocaleData(en);
 
 @NgModule({
   declarations: [],
@@ -20,7 +22,7 @@ registerLocaleData(zh);
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ServiceModule,
+    ServicesModule,
     ViewsModule,
     SharedModule,
     AppRoutingModule,
@@ -29,7 +31,7 @@ registerLocaleData(zh);
     AppRoutingModule,
     SharedModule,
   ],
-  providers: [AuthGuard, { provide: NZ_I18N, useValue: zh_CN }],
+  providers: [AuthGuard, { provide: NZ_I18N, useValue: en_US }],
 })
 export class CoreModule {
   constructor (@SkipSelf() @Optional() parentModule: CoreModule) {
