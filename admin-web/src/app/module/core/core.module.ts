@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-import { NZ_I18N, en_US } from 'ng-zorro-antd';
-// 配置 angular i18n
+
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/zh';
 
@@ -14,7 +13,10 @@ import { ViewsModule } from '../../views/views.module';
 import { SharedModule } from '../shared/shared.module';
 import { AppRoutingModule } from '../../app-routing.module';
 
-registerLocaleData(en);
+// 配置 angular i18n
+import { NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import zh from '@angular/common/locales/zh';
+registerLocaleData(zh);
 
 @NgModule({
   declarations: [],
@@ -31,7 +33,7 @@ registerLocaleData(en);
     AppRoutingModule,
     SharedModule,
   ],
-  providers: [AuthGuard, { provide: NZ_I18N, useValue: en_US }],
+  providers: [AuthGuard, { provide: NZ_I18N, useValue: zh_CN }],
 })
 export class CoreModule {
   constructor (@SkipSelf() @Optional() parentModule: CoreModule) {
