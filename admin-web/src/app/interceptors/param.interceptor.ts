@@ -51,7 +51,7 @@ export class ParamInterceptor implements HttpInterceptor {
         req = req.clone({
           url,
           headers: req.headers
-            .set(X_USER_TOKEN, JSON.parse(storage.getItem(X_USER_TOKEN)))
+            .set(X_USER_TOKEN, storage.getItem(X_USER_TOKEN))
         });
       }
     }

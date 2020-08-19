@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ObjectType } from '@app/types';
+import { UserService } from '@app/services/user/user.service';
+import { NzModalService } from 'ng-zorro-antd';
+import { UserModalComponent } from './modal/user-modal/user-modal.component';
 
 @Component({
   selector: 'app-user',
@@ -6,10 +10,67 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
+  // 表格数据
+  tableList: ObjectType[] = [];
+  // 总多少条数据
+  tableTotal: number = 0;
+  loadData: boolean = true;
 
-  constructor() { }
+  // 当前页码
+  pageNum: number = 1;
+  // 默认一页显示多少条
+  pageSize: number = 10;
+  // 页码可以选择一次展示多少条数据
+  nzPageSizeOptions: number[] = [10, 20, 30, 40, 50];
+  // 设置表格滚动条
+  tableScroll: ObjectType = { x: '500px' };
+
+  constructor (
+    private readonly userService: UserService,
+    private readonly nzModalService: NzModalService,
+  ) { }
 
   ngOnInit(): void {
+    this.initUserList();
   }
 
+  // 新增用户
+  addUser() {
+    this.nzModalService.create({
+      nzTitle: '添加用户',
+      nzContent: UserModalComponent,
+      nzOnOk: async (componentInstance) => {
+        const result = await componentInstance.handleOk();
+        if (result) {
+          this.initUserList();
+        }
+        return result;
+      }
+    })
+  }
+
+  // 页码改变触发事件
+  changePageNumber(pageNum: number): void {
+    this.pageNum = pageNum;
+  }
+
+  // 页数改变触发事件
+  changePageSize(pageSize: number): void {
+    this.pageSize = pageSize;
+  }
+
+  // 获取用户列表数据
+  private initUserList(params?: ObjectType): void {
+    this.userService.userListApi$(params).subscribe(response => {
+      console.log(response);
+      const { code, message, result: { data, total } } = response;
+      if (Object.is(code, 0)) {
+        this.tableList = data;
+        this.tableTotal = total;
+      } else {
+        console.error('查询用户列表', message);
+      }
+      this.loadData = false;
+    })
+  }
 }

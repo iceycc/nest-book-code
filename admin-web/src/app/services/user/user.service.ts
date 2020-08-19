@@ -12,4 +12,25 @@ export class UserService extends BaseService {
   public modifyPassword$(params: ObjectType): Observable<any> {
     return this.patch('admin/user/modify_password', params);
   }
+
+  // 新增用户
+  public createUserApi$(postData: ObjectType): Observable<any> {
+    return this.post('admin/users', postData);
+  }
+
+  // 删除用户
+  public deleteUserByIdApi$(id: number): Observable<any> {
+    return this.delete(`admin/users/${id}`);
+  }
+
+  // 修改用户
+  public modifyUserByIdApi$(id: number, postData: ObjectType): Observable<any> {
+    return this.patch(`admin/users/${id}`, postData);
+  }
+
+  // 获取用户列表
+  public userListApi$(params?: ObjectType): Observable<any> {
+    return this.get('admin/users', params);
+  }
+
 }

@@ -3,3 +3,11 @@
   white-space: nowrap!important;
   text-overflow: ellipsis!important;
 }
+
+
+.operate {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
