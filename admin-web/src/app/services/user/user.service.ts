@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 export class UserService extends BaseService {
 
   // 用户修改密码
-  public modifyPassword$(params: ObjectType): Observable<any> {
-    return this.patch('admin/user/modify_password', params);
+  public modifyPassword$(postData: ObjectType): Observable<any> {
+    return this.post('admin/users/modify_password', postData);
   }
 
   // 新增用户
