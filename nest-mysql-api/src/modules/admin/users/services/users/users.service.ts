@@ -30,8 +30,15 @@ export class UsersService {
    * @return {type} 
    */
   async createUser(createUserDto: CreateUserDto): Promise<AdminUserEntity> {
-    const user = await this.userRepository.create(createUserDto);
-    return await this.userRepository.save(user);
+    // 判断是否已经存在用户
+    const { username } = createUserDto;
+    const isExist = await this.userRepository.findOne({ where: { username, isDel: 0 } });
+    if (isExist) {
+      throw new HttpException(`${username}已经存在不能重复添加`, HttpStatus.OK);
+    } else {
+      const user = await this.userRepository.create(createUserDto);
+      return await this.userRepository.save(user);
+    }
   }
 
   /**
