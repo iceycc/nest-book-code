@@ -13,7 +13,6 @@ export class RoleEntity extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: false,
-    unique: true,
     length: 50,
     name: 'title',
     comment: '角色名称'
