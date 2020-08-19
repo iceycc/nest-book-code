@@ -18,23 +18,23 @@ export class AccessService {
 
   /**
    * @Author: 水痕
-   * @Date: 2020-05-19 08:07:18
+   * @Date: 2020-08-19 12:11:24
    * @LastEditors: 水痕
    * @Description: 创建资源
    * @param {type} 
-   * @return: 
+   * @return {type} 
    */
   async createAccess(createAccessDto: CreateAccessDto): Promise<any> {
     try {
       const { moduleName, actionName } = createAccessDto;
       if (moduleName) {
-        const result = await this.accessRepository.findOne({ where: { moduleName } })
+        const result = await this.accessRepository.findOne({ where: { moduleName, isDel: 0 } })
         if (result) {
           throw new HttpException(`你修改的moduleName:${moduleName},数据库已经存在,不能重名`, HttpStatus.OK);
         }
       }
       if (actionName) {
-        const result = await this.accessRepository.findOne({ where: { actionName } });
+        const result = await this.accessRepository.findOne({ where: { actionName, isDel: 0 } });
         if (result) {
           throw new HttpException(`你修改的actionName:${actionName},数据库已经存在,不能重名`, HttpStatus.OK);
         }
@@ -48,11 +48,11 @@ export class AccessService {
 
   /**
    * @Author: 水痕
-   * @Date: 2020-05-19 08:10:59
+   * @Date: 2020-08-19 12:11:16
    * @LastEditors: 水痕
    * @Description: 根据id删除资源
    * @param {type} 
-   * @return: 
+   * @return {type} 
    */
   async deleteById(id: number): Promise<any> {
     // 判断如果有子节点的时候就不能删除
@@ -70,11 +70,11 @@ export class AccessService {
 
   /**
    * @Author: 水痕
-   * @Date: 2020-05-19 08:14:34
+   * @Date: 2020-08-19 12:11:07
    * @LastEditors: 水痕
    * @Description: 根据id更改资源
    * @param {type} 
-   * @return: 
+   * @return {type} 
    */
   async updateById(id: number, data: UpdateAccessDto): Promise<any> {
     const { raw: { affectedRows } } = await this.accessRepository.update({ id }, data);
@@ -87,11 +87,11 @@ export class AccessService {
 
   /**
    * @Author: 水痕
-   * @Date: 2020-05-19 08:20:33
+   * @Date: 2020-08-19 12:11:00
    * @LastEditors: 水痕
    * @Description: 根据类型获取全部的模块
    * @param {type} 
-   * @return: 
+   * @return {type} 
    */
   async moduleList(type: number): Promise<any> {
     return await this.accessRepository.find({ where: { type, status: 1, isDel: 0 } });
@@ -99,11 +99,11 @@ export class AccessService {
 
   /**
    * @Author: 水痕
-   * @Date: 2020-05-19 08:23:05
+   * @Date: 2020-08-19 12:10:45
    * @LastEditors: 水痕
    * @Description: 分页查找全部的资源
    * @param {type} 
-   * @return: 
+   * @return {type} 
    */
   async accessList(queryOption: ObjectType): Promise<any> {
     const { pageSize = 10, pageNumber = 1, type = 1, id = -1 } = queryOption;
