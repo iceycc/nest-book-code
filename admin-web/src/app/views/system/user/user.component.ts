@@ -17,15 +17,6 @@ export class UserComponent implements OnInit {
   tableTotal: number = 0;
   loadData: boolean = true;
 
-  // 当前页码
-  pageNum: number = 1;
-  // 默认一页显示多少条
-  pageSize: number = 10;
-  // 页码可以选择一次展示多少条数据
-  nzPageSizeOptions: number[] = [10, 20, 30, 40, 50];
-  // 设置表格滚动条
-  tableScroll: ObjectType = { x: '500px' };
-
   constructor (
     private readonly userService: UserService,
     private readonly nzModalService: NzModalService,
@@ -33,7 +24,7 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initUserList();
+    this.initUserList(this.searchData());
   }
 
   // 新增用户
@@ -44,7 +35,7 @@ export class UserComponent implements OnInit {
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {
-          this.initUserList();
+          this.initUserList(this.searchData());
         }
         return result;
       }
@@ -64,7 +55,7 @@ export class UserComponent implements OnInit {
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {
-          this.initUserList();
+          this.initUserList(this.searchData());
         }
         return result;
       }
@@ -82,7 +73,7 @@ export class UserComponent implements OnInit {
         this.userService.deleteUserByIdApi$(id).subscribe(data => {
           const { code, message } = data;
           if (Object.is(code, 0)) {
-            this.initUserList();
+            this.initUserList(this.searchData());
             this.message.create('success', message);
           } else {
             this.message.create('error', message);
@@ -103,21 +94,26 @@ export class UserComponent implements OnInit {
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {
-          this.initUserList();
+          this.initUserList(this.searchData());
         }
         return result;
       }
     })
   }
 
-  // 页码改变触发事件
-  changePageNumber(pageNum: number): void {
-    this.pageNum = pageNum;
+  // 切换页码的时候
+  changePage(params: ObjectType) {
+    this.loadData = true;
+    this.initUserList(this.searchData(params));
   }
 
-  // 页数改变触发事件
-  changePageSize(pageSize: number): void {
-    this.pageSize = pageSize;
+  // 设置搜索的条件
+  private searchData(params?: ObjectType) {
+    return {
+      pageNumber: 1,
+      pageSize: 10,
+      ...params,
+    }
   }
 
   // 获取用户列表数据

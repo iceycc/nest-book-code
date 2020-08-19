@@ -4,33 +4,28 @@
       新增用户
     </button>
   </div>
-  <nz-table #basicTable [nzData]="tableList" nzBordered [nzLoading]="loadData" [nzPageSizeOptions]="nzPageSizeOptions"
-    nzShowQuickJumper="true" nzShowSizeChanger="true" nzHideOnSinglePage="true"
-    (nzPageIndexChange)="changePageNumber($event)" (nzPageSizeChange)="changePageSize($event)" nzFrontPagination="false"
-    [nzScroll]="tableScroll" [nzTotal]="tableTotal" [nzPageSize]="pageSize" [nzPageIndex]="pageNum">
-    <thead>
-      <tr>
-        <th nzAlign="center" style="width: 80px;">ID</th>
-        <th nzAlign="center" style="width: 180px;">用户名</th>
-        <th nzAlign="center">创建时间</th>
-        <th nzAlign="center">更新时间</th>
-        <th nzAlign="center">操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of basicTable.data">
-        <td nzAlign="right">{{data.id}}</td>
-        <td nzAlign="right">{{data.username}}</td>
-        <td nzAlign="center">{{data.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-        <td nzAlign="center">{{data.updatedAt| date:'yyyy-MM-dd HH:mm:ss'}}</td>
-        <td nzAlign="center">
-          <button nz-button nzType="default" (click)="editRow(data)">修改</button>
-          <nz-divider nzType="vertical"></nz-divider>
-          <button nz-button nzType="primary" (click)="assignRole(data)">分配角色</button>
-          <nz-divider nzType="vertical"></nz-divider>
-          <button nz-button nzType="danger" (click)="deleteRow(data)">删除</button>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+  <app-my-table [tableDataList]="tableList" [tableTotal]="tableTotal" (changePage)="changePage($event)"
+    [loadData]="loadData">
+    <tr class="thead">
+      <th nzAlign="center" style="width: 80px;">ID</th>
+      <th nzAlign="center" style="width: 180px;">用户名</th>
+      <th nzAlign="center">创建时间</th>
+      <th nzAlign="center">更新时间</th>
+      <th nzAlign="center">操作</th>
+    </tr>
+    <tr *ngFor="let data of tableList" class="tbody">
+      <td nzAlign="right">{{data.id}}</td>
+      <td nzAlign="right">{{data.username}}</td>
+      <td nzAlign="center">{{data.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td nzAlign="center">{{data.updatedAt| date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td nzAlign="center">
+        <button nz-button nzType="default" (click)="editRow(data)">修改</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button nz-button nzType="primary" (click)="assignRole(data)">分配角色</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button nz-button nzType="danger" (click)="deleteRow(data)">删除</button>
+      </td>
+    </tr>
+  </app-my-table>
+
 </div>

@@ -32,7 +32,7 @@ export class RoleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initRoleList();
+    this.initRoleList(this.searchData());
   }
 
   // 新增角色
@@ -43,7 +43,7 @@ export class RoleComponent implements OnInit {
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {
-          this.initRoleList();
+          this.initRoleList(this.searchData());
         }
         return result;
       }
@@ -61,7 +61,7 @@ export class RoleComponent implements OnInit {
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {
-          this.initRoleList();
+          this.initRoleList(this.searchData());
         }
         return result;
       }
@@ -71,14 +71,20 @@ export class RoleComponent implements OnInit {
   interfaceAuth(rowData: ObjectType, type: number): void { }
   deleteRow(rowData: ObjectType): void { }
 
-  // 页码改变触发事件
-  changePageNumber(pageNum: number): void {
-    this.pageNum = pageNum;
+
+  // 切换页码的时候
+  changePage(params: ObjectType) {
+    this.loadData = true;
+    this.initRoleList(this.searchData(params));
   }
 
-  // 页数改变触发事件
-  changePageSize(pageSize: number): void {
-    this.pageSize = pageSize;
+  // 设置搜索的条件
+  private searchData(params?: ObjectType) {
+    return {
+      pageNumber: 1,
+      pageSize: 10,
+      ...params,
+    }
   }
 
   private initRoleList(queryOption?: ObjectType): void {

@@ -4,9 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { PipesModule } from '@app/pipes/pipes.module';
+import { MyTableComponent } from './components/my-table/my-table.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [MyTableComponent],
   imports: [
     PipesModule,
     CommonModule,
@@ -20,6 +21,7 @@ import { PipesModule } from '@app/pipes/pipes.module';
     NgZorroAntdModule,
     FormsModule,
     ReactiveFormsModule,
+    MyTableComponent,
   ]
 })
 export class SharedModule { }
