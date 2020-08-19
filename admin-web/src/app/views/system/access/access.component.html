@@ -1,1 +1,47 @@
-<p>access works!</p>
+<div class="system-access">
+  <div class="operate">
+    <button nz-button [nzType]="'primary'" (click)="addAccess()">
+      新增资源
+    </button>
+  </div>
+  <app-my-table [tableDataList]="tableList" [tableTotal]="tableTotal" (changePage)="changePage($event)"
+    [loadData]="loadData">
+    <tr class="thead">
+      <th style="width:200px;" nzAlign="left">模块名称</th>
+      <th style="width:80px;" nzAlign="center">类型</th>
+      <th style="width:100px;" nzAlign="center">操作名称</th>
+      <th style="width:200px;" nzAlign="center">地址</th>
+      <th style="width:100px;" nzAlign="center">图标</th>
+      <th style="width:100px;" nzAlign="center">请求方式</th>
+      <th style="width:80px;" nzAlign="center">状态</th>
+      <th style="width:80px;" nzAlign="center">排序</th>
+      <th style="width:200px;" nzAlign="center">资源描素</th>
+      <th style="width:200px;" nzAlign="center">操作</th>
+    </tr>
+    <tr *ngFor="let item of tableList" class="tbody">
+      <td [nzIndentSize]="item.type! * 20" [nzShowExpand]="item.children" (nzExpandChange)="changeRow(item, $event)">
+        {{ item.moduleName }}
+      </td>
+      <td nzAlign="left" nzAlign="center">
+        <span *ngIf="item.type==1">模块</span>
+        <span *ngIf="item.type==2">菜单</span>
+        <span *ngIf="item.type==3">操作</span>
+      </td>
+      <td nzAlign="right">{{ item.actionName }}</td>
+      <td nzAlign="right">{{ item.url }}</td>
+      <td nzAlign="right">{{ item.icon }}</td>
+      <td nzAlign="center">{{ item.method }}</td>
+      <td nzAlign="center">
+        <img src="/assets/images/yes.gif" *ngIf="item.status==1" />
+        <img src="/assets/images/no.gif" *ngIf="item.status==0" />
+      </td>
+      <td nzAlign="center">{{ item.sort }}</td>
+      <td nzAlign="right">{{ item.description }}</td>
+      <td nzAlign="center">
+        <button nz-button nzType="default" (click)="editAccess(item)">修改</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button nz-button nzType="danger" (click)="deleteRowData(item)">删除</button>
+      </td>
+    </tr>
+  </app-my-table>
+</div>
