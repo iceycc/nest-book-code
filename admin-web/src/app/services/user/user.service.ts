@@ -33,4 +33,13 @@ export class UserService extends BaseService {
     return this.get('admin/users', params);
   }
 
+  // 获取用户Id获取角色列表
+  public roleTreeListApi$(userId: number): Observable<any> {
+    return this.get(`admin/users_role/${userId}`);
+  }
+
+  // 给当前用户分配角色
+  public assignRoleApi$(postData: ObjectType): Observable<any> {
+    return this.post('admin/users_role', postData);
+  }
 }

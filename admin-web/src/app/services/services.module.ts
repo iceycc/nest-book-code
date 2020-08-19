@@ -5,6 +5,7 @@ import { ParamInterceptor } from '@app/interceptors/param.interceptor';
 import { LoginService } from '@app/services/login/login.service';
 import { UserService } from '@app/services/user/user.service';
 import { MenusService } from '@app/services/menus/menus.service';
+import { RoleService } from './role/role.service';
 
 @NgModule({
   declarations: [],
@@ -25,6 +26,7 @@ import { MenusService } from '@app/services/menus/menus.service';
     LoginService,
     UserService,
     MenusService,
+    RoleService,
   ],
   exports: []
 })

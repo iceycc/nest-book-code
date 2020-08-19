@@ -3,6 +3,7 @@ import { ObjectType } from '@app/types';
 import { UserService } from '@app/services/user/user.service';
 import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { UserModalComponent } from './modal/user-modal/user-modal.component';
+import { UserRoleModalComponent } from './modal/user-role-modal/user-role-modal.component';
 
 @Component({
   selector: 'app-user',
@@ -89,6 +90,24 @@ export class UserComponent implements OnInit {
         })
       },
     });
+  }
+
+  // 分配角色
+  assignRole(rowData: ObjectType): void {
+    this.nzModalService.create({
+      nzTitle: '给用户分配角色',
+      nzContent: UserRoleModalComponent,
+      nzComponentParams: {
+        userId: rowData.id,
+      },
+      nzOnOk: async (componentInstance) => {
+        const result = await componentInstance.handleOk();
+        if (result) {
+          this.initUserList();
+        }
+        return result;
+      }
+    })
   }
 
   // 页码改变触发事件
