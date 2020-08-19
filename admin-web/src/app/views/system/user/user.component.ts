@@ -35,10 +35,30 @@ export class UserComponent implements OnInit {
   }
 
   // 新增用户
-  addUser() {
+  addUser(): void {
     this.nzModalService.create({
       nzTitle: '添加用户',
       nzContent: UserModalComponent,
+      nzOnOk: async (componentInstance) => {
+        const result = await componentInstance.handleOk();
+        if (result) {
+          this.initUserList();
+        }
+        return result;
+      }
+    })
+  }
+
+  // 编辑行
+  editRow(rowData: ObjectType): void {
+    this.nzModalService.create({
+      nzTitle: '编辑用户',
+      nzContent: UserModalComponent,
+      nzComponentParams: {
+        rowData,
+      },
+      nzOkText: '确认',
+      nzCancelText: '取消',
       nzOnOk: async (componentInstance) => {
         const result = await componentInstance.handleOk();
         if (result) {

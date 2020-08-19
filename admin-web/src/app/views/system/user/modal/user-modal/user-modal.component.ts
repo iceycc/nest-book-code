@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd';
 import { UserService } from '@app/services/user/user.service';
@@ -12,8 +12,9 @@ import { ValidatorsUsername } from '@app/validators';
 })
 export class UserModalComponent implements OnInit {
   validateForm: FormGroup;
-  // 是否编辑状态
-  isEdit: boolean = false;
+
+  // 输入属性
+  @Input() rowData: ObjectType = {};
 
   constructor (
     private readonly fb: FormBuilder,
@@ -26,6 +27,10 @@ export class UserModalComponent implements OnInit {
       username: ['', [Validators.required, ValidatorsUsername]],
       password: ['', [Validators.required, Validators.minLength(3)]]
     })
+    // 如果是编辑的时候就删除字段
+    if (this.isEdit) {
+      this.validateForm.removeControl('username');
+    }
   }
 
   // 成功按钮的回调
@@ -38,14 +43,33 @@ export class UserModalComponent implements OnInit {
     }
   }
 
-  // 提交数据到服务器端
-  private async subData(postData: ObjectType): Promise<boolean | null> {
-    const { code, message } = await this.userService.createUserApi$(postData).toPromise();
-    if (Object.is(code, 0)) {
-      this.message.create('success', message);
+  get isEdit(): boolean {
+    if (Object.keys(this.rowData).length) {
       return true;
     } else {
-      this.message.create('error', message);
+      return false;
+    }
+  }
+
+  // 提交数据到服务器端
+  private async subData(postData: ObjectType): Promise<boolean | null> {
+    if (this.isEdit) {
+      const { id, ..._ } = this.rowData;
+      const { code, message } = await this.userService.modifyUserByIdApi$(id, postData).toPromise();
+      if (Object.is(code, 0)) {
+        this.message.create('success', message);
+        return true;
+      } else {
+        this.message.create('error', message);
+      }
+    } else {
+      const { code, message } = await this.userService.createUserApi$(postData).toPromise();
+      if (Object.is(code, 0)) {
+        this.message.create('success', message);
+        return true;
+      } else {
+        this.message.create('error', message);
+      }
     }
   }
 
