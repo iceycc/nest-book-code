@@ -10,6 +10,7 @@ import { UpdateUserDto } from '../../controllers/users/dto/update.user.dto';
 import { ObjectType } from '@src/types';
 import { jwt } from '@src/utils';
 import { RedisUtilsService } from '@src/modules/redis-utils/redis-utils.service';
+import { ModifyPasswordDto } from '../../controllers/users/dto/modify.password.dto';
 
 @Injectable()
 export class UsersService {
@@ -59,17 +60,11 @@ export class UsersService {
    * @return {type} 
    */
   async modifyUserById(id: number, data: UpdateUserDto): Promise<string> {
-    const { password, newPassword } = data;
-    const currentUser = await this.userRepository.findOne({ where: { id } });
-    if (this.toolsService.checkPassword(password, currentUser.password)) {
-      const { raw: { affectedRows } } = await this.userRepository.update(id, { password: this.toolsService.makePassword(newPassword) });
-      if (affectedRows) {
-        return '修改成功';
-      } else {
-        return '修改失败';
-      }
+    const { raw: { affectedRows } } = await this.userRepository.update(id, { username: data.username });
+    if (affectedRows) {
+      return '修改成功';
     } else {
-      throw new HttpException('旧密码验证错误', HttpStatus.OK);
+      return '修改失败';
     }
   }
 
@@ -113,6 +108,29 @@ export class UsersService {
       total,
       pageNumber,
       pageSize,
+    }
+  }
+
+  /**
+   * @Author: 水痕
+   * @Date: 2020-08-19 10:23:27
+   * @LastEditors: 水痕
+   * @Description: 根据旧密码修改新密码
+   * @param {type} 
+   * @return {type} 
+   */
+  async modifyPasswordDto(id: number, modifyPasswordDto: ModifyPasswordDto): Promise<string> {
+    const { password, newPassword } = modifyPasswordDto;
+    const currentUser = await this.userRepository.findOne({ where: { id } });
+    if (this.toolsService.checkPassword(password, currentUser.password)) {
+      const { raw: { affectedRows } } = await this.userRepository.update(id, { password: this.toolsService.makePassword(newPassword) });
+      if (affectedRows) {
+        return '修改成功';
+      } else {
+        return '修改失败';
+      }
+    } else {
+      throw new HttpException('旧密码验证错误', HttpStatus.OK);
     }
   }
 

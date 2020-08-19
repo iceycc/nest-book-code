@@ -8,6 +8,8 @@ import { ApiOperation, ApiCreatedResponse, ApiTags, ApiBasicAuth } from '@nestjs
 import { UpdateUserDto } from './dto/update.user.dto';
 import { ObjectType } from '@src/types';
 import { AuthGuard } from '@src/guard/auth.guard';
+import { ModifyPasswordDto } from './dto/modify.password.dto';
+import { CurrentUser } from '@src/decorators/current.user';
 
 @ApiTags('用户模块')
 @ApiBasicAuth()
@@ -70,4 +72,17 @@ export class UsersController {
   ): Promise<any> {
     return await this.userService.userList(queryOption);
   }
+
+  @ApiOperation({
+    summary: '修改密码',
+    description: '根据旧密码修改新密码'
+  })
+  @Post('modify_password')
+  async modifyPassword(
+    @CurrentUser('id', new ParseIntPipe()) id: number,
+    @Body() modifyPasswordDto: ModifyPasswordDto,
+  ): Promise<string> {
+    return await this.userService.modifyPasswordDto(id, modifyPasswordDto);
+  }
+
 }
