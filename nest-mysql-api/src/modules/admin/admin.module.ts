@@ -4,6 +4,10 @@ import { RoleModule } from './role/role.module';
 import { AccessModule } from './access/access.module';
 
 @Module({
-  imports: [UsersModule, RoleModule, AccessModule]
+  imports: [
+    UsersModule,
+    RoleModule,
+    AccessModule
+  ]
 })
-export class AdminModule {}
+export class AdminModule { }

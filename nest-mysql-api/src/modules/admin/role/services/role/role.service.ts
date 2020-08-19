@@ -92,6 +92,7 @@ export class RoleService {
     this.toolsService.checkPage(pageSize, pageNumber);
     const [data, total] = await getConnection().createQueryBuilder(RoleEntity, 'role')
       .andWhere('(role.isDel = :isDel)', { isDel: 0 })
+      .orderBy({ 'role.createdAt': 'DESC' })
       .skip((pageNumber - 1) * pageSize)
       .take(pageSize)
       .printSql()
