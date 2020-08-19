@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ObjectType } from '@app/types';
 import { UserService } from '@app/services/user/user.service';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { UserModalComponent } from './modal/user-modal/user-modal.component';
 
 @Component({
@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
   constructor (
     private readonly userService: UserService,
     private readonly nzModalService: NzModalService,
+    private readonly message: NzMessageService,
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +68,27 @@ export class UserComponent implements OnInit {
         return result;
       }
     })
+  }
+
+  // 删除数据
+  deleteRow(rowData: ObjectType): void {
+    const { id } = rowData;
+    this.nzModalService.confirm({
+      nzTitle: '删除用户提示?',
+      nzContent: `<b style="color: red;">是否要删除: ${rowData.username}该用户</b>`,
+      nzOkType: 'danger',
+      nzOnOk: () => {
+        this.userService.deleteUserByIdApi$(id).subscribe(data => {
+          const { code, message } = data;
+          if (Object.is(code, 0)) {
+            this.initUserList();
+            this.message.create('success', message);
+          } else {
+            this.message.create('error', message);
+          }
+        })
+      },
+    });
   }
 
   // 页码改变触发事件
