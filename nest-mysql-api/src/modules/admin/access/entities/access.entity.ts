@@ -100,6 +100,14 @@ export class AccessEntity extends BaseEntity {
   })
   description: string | null;
 
+  @Column('tinyint', {
+    nullable: true,
+    default: () => 1,
+    name: 'status',
+    comment: '状态,1表示正常,0表示禁用'
+  })
+  status: number | null;
+
   @Exclude()
   @Column({
     type: 'tinyint',
