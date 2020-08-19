@@ -27,9 +27,12 @@ export class UserModalComponent implements OnInit {
       username: ['', [Validators.required, ValidatorsUsername]],
       password: ['', [Validators.required, Validators.minLength(3)]]
     })
-    // 如果是编辑的时候就删除字段
+    // 如果是编辑的时候就删除字段并且赋值
     if (this.isEdit) {
-      this.validateForm.removeControl('username');
+      this.validateForm.removeControl('password');
+      this.validateForm.patchValue({
+        username: this.rowData.username,
+      })
     }
   }
 
