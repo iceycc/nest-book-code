@@ -69,7 +69,26 @@ export class RoleComponent implements OnInit {
   }
   menusAuth(rowData: ObjectType, type: number): void { }
   interfaceAuth(rowData: ObjectType, type: number): void { }
-  deleteRow(rowData: ObjectType): void { }
+  // 删除角色
+  deleteRow(rowData: ObjectType): void {
+    const { id } = rowData;
+    this.nzModalService.confirm({
+      nzTitle: '删除角色提示?',
+      nzContent: `<b style="color: red;">是否要删除: ${rowData.title}该角色</b>`,
+      nzOkType: 'danger',
+      nzOnOk: () => {
+        this.roleService.deleteRoleByIdApi$(id).subscribe(data => {
+          const { code, message } = data;
+          if (Object.is(code, 0)) {
+            this.initRoleList(this.searchData());
+            this.message.create('success', message);
+          } else {
+            this.message.create('error', message);
+          }
+        })
+      },
+    });
+  }
 
 
   // 切换页码的时候
