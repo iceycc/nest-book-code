@@ -8,6 +8,7 @@ import { UserModalComponent } from './user/modal/user-modal/user-modal.component
 import { UserRoleModalComponent } from './user/modal/user-role-modal/user-role-modal.component';
 import { RoleModalComponent } from './role/modal/role-modal/role-modal.component';
 import { EditAccessComponent } from './access/modal/edit-access/edit-access.component';
+import { AccessModalComponent } from './role/modal/access-modal/access-modal.component';
 
 @NgModule({
   entryComponents: [
@@ -15,6 +16,7 @@ import { EditAccessComponent } from './access/modal/edit-access/edit-access.comp
     UserRoleModalComponent,
     RoleModalComponent,
     EditAccessComponent,
+    AccessModalComponent,
   ],
   declarations: [
     UserComponent,
@@ -24,6 +26,7 @@ import { EditAccessComponent } from './access/modal/edit-access/edit-access.comp
     UserRoleModalComponent,
     RoleModalComponent,
     EditAccessComponent,
+    AccessModalComponent,
   ],
   imports: [
     SystemRoutingModule,

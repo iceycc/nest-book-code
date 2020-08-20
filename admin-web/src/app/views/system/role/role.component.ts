@@ -3,6 +3,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { ObjectType } from '@app/types';
 import { RoleService } from '@app/services/role/role.service';
 import { RoleModalComponent } from './modal/role-modal/role-modal.component';
+import { AccessModalComponent } from './modal/access-modal/access-modal.component';
 
 @Component({
   selector: 'app-role',
@@ -67,8 +68,32 @@ export class RoleComponent implements OnInit {
       }
     })
   }
-  menusAuth(rowData: ObjectType, type: number): void { }
-  interfaceAuth(rowData: ObjectType, type: number): void { }
+  // 给角色赋菜单权限
+  menusAuth(data: any, type: string): void {
+    console.log(data);
+    this.openAccessModal('给角色分配菜单权限', data, type);
+  }
+
+  // 给角色赋接口权限
+  interfaceAuth(data: any, type: string): void {
+    this.openAccessModal('给角色分配接口权限', data, type);
+  }
+
+  // 分配权限的弹框
+  openAccessModal(title: string, data: any, type: string): void {
+    this.nzModalService.create({
+      nzTitle: title,
+      nzContent: AccessModalComponent,
+      nzComponentParams: {
+        roleId: data.id,
+        type,
+      },
+      nzOnOk: async (componentInstance) => { // 保存
+        return await componentInstance.handleOk();
+      }
+    })
+  }
+
   // 删除角色
   deleteRow(rowData: ObjectType): void {
     const { id } = rowData;

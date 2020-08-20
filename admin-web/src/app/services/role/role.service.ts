@@ -26,4 +26,9 @@ export class RoleService extends BaseService {
   public roleListApi$(queryOption: ObjectType): Observable<any> {
     return this.get('admin/role', queryOption)
   }
+
+  // 给角色分配权限
+  public assignAccessApi$(params: ObjectType): Observable<any> {
+    return this.post('admin/role_access', params)
+  }
 }
