@@ -4,10 +4,11 @@ import { Injectable } from '@nestjs/common';
 export class LoggerService {
 
   log(str: string): void {
-    console.log(str);
+    console.log('我是log日志:' + str);
   }
 
   error(str: string): void {
-    console.error(str);
+    console.error('我是error日志:',str);
   }
 }
+    

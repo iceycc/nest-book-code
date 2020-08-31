@@ -2,28 +2,37 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerService } from './logger/logger.service';
+import { UserModule } from './user/user.module';
+import { HomeController } from './home/home.controller';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
+  imports: [UserModule],
+  controllers: [AppController, HomeController],
   providers: [
     {
       provide: 'LOG',
-      useClass: LoggerService
+      useClass: LoggerService,
+    },
+    {
+      provide: 'LOG2',
+      useClass: LoggerService,
     },
     {
       provide: 'APP_SERVICE',
-      useFactory: (logger) => {
+      useFactory: (logger, logger2) => {
         logger.log('使用工厂方式');
+        logger2.error('测试2222');
         return '工厂方法返回';
       },
-      inject: ['LOG']
+      inject: ['LOG', 'LOG2'],
     },
     {
       provide: 'IS_DEV',
-      useValue: { isDev: true }
-    }
+      useValue: { isDev:()=>{
+        return Math.random()
+      }},
+    },
   ],
-  exports: []
+  exports: [],
 })
-export class AppModule { }
+export class AppModule {}

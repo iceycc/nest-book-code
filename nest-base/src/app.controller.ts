@@ -9,14 +9,14 @@ export class AppController {
   constructor (
     @Inject('APP_SERVICE') readonly appService: AppService,
     @Inject('LOG') readonly loggerService: LoggerService,
-    @Inject('IS_DEV') readonly isDev: { isDev: boolean },
+    @Inject('IS_DEV') readonly isDev: { isDev: Function },
   ) { }
 
-  @Get()
+  @Get('nest')
   getHello(): string {
-    this.loggerService.log('日志');
+    this.loggerService.log('getHello');
     console.log(this.appService);
-    console.log(this.isDev);
+    console.log(this.isDev.isDev());
     return 'nestjs';
   }
 }
